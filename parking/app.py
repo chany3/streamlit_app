@@ -12,9 +12,9 @@ st.set_page_config(page_title="서울시 공영주차장 안내", page_icon="�
 def load_data():
     # 파일 인코딩은 보통 공공데이터의 경우 cp949나 euckr을 사용합니다.
     try:
-        df = pd.read_csv("서울시 공영주차장 안내 정보.csv", encoding="cp949")
+        df = pd.read_csv("../서울시 공영주차장 안내 정보.csv", encoding="cp949")
     except UnicodeDecodeError:
-        df = pd.read_csv("서울시 공영주차장 안내 정보.csv", encoding="utf-8")
+        df = pd.read_csv("../서울시 공영주차장 안내 정보.csv", encoding="utf-8")
     
     # 위도, 경도 컬럼명을 st.map이나 pydeck에서 인식하기 쉽게 변경 및 결측치 제거
     df = df.dropna(subset=['위도', '경도'])
