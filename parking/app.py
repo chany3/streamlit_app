@@ -3,6 +3,7 @@ import pandas as pd
 import pydeck as pdk
 import plotly.express as px
 import random
+import os
 
 # 페이지 설정
 st.set_page_config(page_title="서울시 공영주차장 안내", page_icon="🚗", layout="wide")
