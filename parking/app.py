@@ -10,18 +10,23 @@ st.set_page_config(page_title="서울시 공영주차장 안내", page_icon="�
 # 데이터 불러오기 (캐싱하여 성능 최적화)
 @st.cache_data
 def load_data():
-    # 파일 인코딩은 보통 공공데이터의 경우 cp949나 euckr을 사용합니다.
-    try:
-        df = pd.read_csv("서울시 공영주차장 안내 정보.csv", encoding="cp949")
-    except UnicodeDecodeError:
-        df = pd.read_csv("서울시 공영주차장 안내 정보.csv", encoding="utf-8")
+    # 현재 app.py 파일이 있는 폴더의 절대 경로를 가져옵니다.
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # 위도, 경도 컬럼명을 st.map이나 pydeck에서 인식하기 쉽게 변경 및 결측치 제거
+    # 폴더 경로와 파일명을 합쳐서 정확한 위치를 지정해 줍니다.
+    file_path = os.path.join(current_dir, "서울시 공영주차장 안내 정보.csv")
+    
+    try:
+        df = pd.read_csv(file_path, encoding="cp949")
+    except UnicodeDecodeError:
+        df = pd.read_csv(file_path, encoding="utf-8")
+    
+    # 위도, 경도 컬럼명 변경 및 결측치 제거
     df = df.dropna(subset=['위도', '경도'])
     df['lat'] = df['위도'].astype(float)
     df['lon'] = df['경도'].astype(float)
     
-    # 주소에서 '자치구' 추출 (예: '서울특별시 강남구 ...' -> '강남구')
+    # 주소에서 '자치구' 추출
     df['자치구'] = df['주소'].apply(lambda x: str(x).split()[1] if len(str(x).split()) > 1 else "알수없음")
     
     # 요금 관련 결측치를 0으로 채우기
